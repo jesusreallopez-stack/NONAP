@@ -1,0 +1,108 @@
+/* Main document surface: a soft ruled notebook page. */
+.document-page {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+  background-color: #fffef9;
+  background-image: linear-gradient(to right, transparent 0, transparent 43px, #e8bdbc 43px, #e8bdbc 44px, transparent 44px);
+  --notebook-margin: 66px;
+  --notebook-rule: 34px;
+  --notebook-line-offset: -8px;
+  /* US Letter: 8.5 × 11 inches, with printable editorial margins. */
+  width: min(8.5in, 100%);
+  max-width: 8.5in;
+  min-height: 11in;
+  padding: 0.7in 0.65in 0.8in;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+.document-page > * { position: relative; z-index: 1; }
+
+.document-title,
+.document-meta,
+.editor-divider,
+.writing-switch,
+.ai-writer { background-color: #fffef9; }
+
+.document-title,
+.document-meta,
+.editor-divider,
+.writing-switch,
+.ai-writer,
+.text-composer,
+.selection-bar { margin-left: var(--notebook-margin); }
+
+.document-title { width: calc(100% - var(--notebook-margin)); }
+
+.document-text {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 32px, #d6e2de 33px, transparent var(--notebook-rule));
+  background-size: 100% var(--notebook-rule);
+  background-position: 0 var(--notebook-line-offset);
+  line-height: var(--notebook-rule);
+  resize: none;
+  overflow: hidden;
+}
+
+.text-composer { width: calc(100% - var(--notebook-margin)); }
+.selection-bar { width: calc(100% - var(--notebook-margin)); }
+
+.inserted-visual,
+.visual-picker { break-inside: avoid-page; page-break-inside: avoid; }
+
+.letter-boundary {
+  position: absolute;
+  z-index: 3;
+  top: calc(11in - 28px);
+  left: 0.18in;
+  right: 0.18in;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #aebbb7;
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.letter-boundary::before,
+.letter-boundary::after { content: ""; height: 1px; flex: 1; background: repeating-linear-gradient(to right, #cbd6d3 0 4px, transparent 4px 8px); }
+
+@page { size: letter; margin: 0; }
+
+@media print {
+  .rail,
+  .library,
+  .document-topbar,
+  .visual-helper,
+  .selection-bar,
+  .visual-picker,
+  .inline-create,
+  .toast { display: none !important; }
+
+  .document-app,
+  .editor-area,
+  .document-scroll { display: block; height: auto; overflow: visible; padding: 0; background: #fff; }
+
+  .document-page {
+    width: 8.5in;
+    min-height: 11in;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .letter-boundary { display: none; }
+}
+
+@media (max-width: 680px) {
+  .document-page { --notebook-margin: 36px; --notebook-rule: 31px; --notebook-line-offset: -7px; padding: 35px 22px; }
+  .document-text { background-size: 100% var(--notebook-rule); line-height: var(--notebook-rule); }
+}
